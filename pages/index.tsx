@@ -1,8 +1,10 @@
 import { NextPage, GetStaticProps} from 'next'
-import { Layout } from '../components/layout'
+import { Layout } from '../components/layouts'
 
 import pokeApi from '../api/pokeApi';
 import { PokemonListResponse, SmallPokemon } from '../interfaces';
+import { Grid } from '@nextui-org/react';
+import { PokemonCard } from '../components/pokemon';
 
 interface Props {
   pokemons: SmallPokemon[];
@@ -14,13 +16,13 @@ const HomePage: NextPage<Props> = ({ pokemons }) => {
 
   return (
     <Layout title='Listado de Pokemons'>
-      <ul>
+      <Grid.Container gap={ 2 } justify={'flex-start'} >
         {
-          pokemons.map( (poke) => (
-            <li key={poke.id}># {poke.id} - {poke.name} </li>
+          pokemons.map( (pokemon) => (
+            <PokemonCard pokemon={pokemon} key={ pokemon.id } />
           ))
         }
-      </ul>
+      </Grid.Container>
     </Layout>
   )
 }
@@ -38,6 +40,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   })
   );
 
+  return {
+    props: {
+      pokemons
+    }
+  }
 
 /*   let pokemons: SmallPokemon[] = data.results;
   const urlApiPokemon = `https://pokeapi.co/api/v2/pokemon/`;
@@ -50,11 +57,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   }
 }); */
 
-  return {
-    props: {
-      pokemons
-    }
-  }
 }
 
 export default HomePage
